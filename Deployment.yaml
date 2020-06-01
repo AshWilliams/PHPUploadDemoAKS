@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dropzone-demo
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: dropzone-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dropzone-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dropzone-demo
+  template:
+    metadata:
+      labels:
+        app: dropzone-demo
+    spec:
+      containers:
+      - name: dropzone-demo
+        image: ashwilliams/dropzone-demo:v1
+        ports:
+        - containerPort: 8080
