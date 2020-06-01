@@ -15,7 +15,7 @@ kind: Deployment
 metadata:
   name: dropzone-demo
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: dropzone-demo
@@ -24,8 +24,18 @@ spec:
       labels:
         app: dropzone-demo
     spec:
+      securityContext:
+        runAsUser: 65534
+        fsGroup: 65534
       containers:
       - name: dropzone-demo
-        image: ashwilliams/dropzone-demo:v1
+        image: ashwilliams/dropzone-demo:v2
         ports:
         - containerPort: 8080
+        volumeMounts:
+        - name: images-persistent-storage2
+          mountPath: /var/www/html/images
+      volumes:
+      - name: images-persistent-storage2
+        persistentVolumeClaim:
+          claimName: images-persistent-storage2
